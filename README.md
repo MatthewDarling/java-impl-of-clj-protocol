@@ -33,3 +33,20 @@ with the protocol's naming, and it won't work.
 There are some more advanced options to :gen-class that I need to
 investigate that may keep them from clashing, and allow for types
 other than Object to be used on the method implementations.
+
+# Return types
+
+As explained on the Clojure compilation page, gen-interface can
+produce an interface with correctly typed methods. However,
+defprotocol will
+[always use Object](https://github.com/clojure/clojure/blob/clojure-1.8.0/src/clj/clojure/core_deftype.clj#L647)
+for its argument and return types. Presumably that's necessary for protocols
+to be as dynamic as they are.
+
+So using defprotocol would mean you have to document the acceptable
+return types and the expected argument types. And there would be
+runtime errors instead of compile errors for any code not fitting the
+assumptions. Or worse - if the return type is wrong but still accepted
+by the Clojure code, you might get strange behaviour.
+
+Those limitations are probably why nobody actually does this.
